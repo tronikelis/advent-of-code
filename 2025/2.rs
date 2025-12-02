@@ -4,36 +4,66 @@ use std::{
     io::{BufRead, BufReader},
 };
 
+fn chunk_slice_same_elements<T: PartialEq>(slice: &[&[T]]) -> bool {
+    if slice.len() < 1 {
+        return true;
+    }
+    let item = &slice[0];
+
+    for v in slice {
+        if v != item {
+            return false;
+        };
+    }
+
+    true
+}
+
 fn parse_invalid_ids(first: usize, second: usize) -> Vec<usize> {
     let mut invalid_ids = Vec::new();
 
-    let mut i = first;
-    while i <= second {
-        let i_str = i.to_string();
-        if i_str.len() % 2 != 0 {
-            i += 1;
-            continue;
-        }
+    // part 1
+    // let mut i = first;
+    // while i <= second {
+    //     let i_str = i.to_string();
+    //     if i_str.len() % 2 != 0 {
+    //         i += 1;
+    //         continue;
+    //     }
+    //
+    //     let mid = i_str.len() / 2;
+    //     let first_half = &i_str[0..mid];
+    //     let second_half = &i_str[mid..i_str.len()];
+    //     let combined = format!("{}{}", first_half, first_half).parse().unwrap();
+    //
+    //     if combined >= first && combined <= second {
+    //         invalid_ids.push(combined);
+    //
+    //         // skip to next possible half
+    //         let mut first_half_parsed: usize = first_half.parse().unwrap();
+    //         first_half_parsed += 1;
+    //
+    //         let new_i = format!("{}{}", first_half_parsed, second_half)
+    //             .parse()
+    //             .unwrap();
+    //
+    //         i = new_i;
+    //     } else {
+    //         i += 1;
+    //     }
+    // }
 
-        let mid = i_str.len() / 2;
-        let first_half = &i_str[0..mid];
-        let second_half = &i_str[mid..i_str.len()];
-        let combined = format!("{}{}", first_half, first_half).parse().unwrap();
+    for i in first..=second {
+        let num = i.to_string();
 
-        if combined >= first && combined <= second {
-            invalid_ids.push(combined);
+        for j in 1..=(num.len() / 2) {
+            let chunks = num.chars().collect::<Vec<_>>();
+            let chunks = chunks.chunks(j).collect::<Vec<_>>();
 
-            // skip to next possible half
-            let mut first_half_parsed: usize = first_half.parse().unwrap();
-            first_half_parsed += 1;
-
-            let new_i = format!("{}{}", first_half_parsed, second_half)
-                .parse()
-                .unwrap();
-
-            i = new_i;
-        } else {
-            i += 1;
+            if chunk_slice_same_elements(&chunks) {
+                invalid_ids.push(i);
+                break;
+            }
         }
     }
 
