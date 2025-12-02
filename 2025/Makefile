@@ -9,6 +9,13 @@ build/1: 1.rs
 1: build/1
 	build/1 1.txt
 
+build/2: 2.rs
+	rustc 2.rs -o build/2
+
+.PHONY: 2
+2: build/2
+	build/2 2.txt
+
 .PHONY: clean
 clean:
 	rm -r build/*
