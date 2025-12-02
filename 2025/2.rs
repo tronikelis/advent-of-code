@@ -4,21 +4,6 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-fn chunk_slice_same_elements<T: PartialEq>(slice: &[&[T]]) -> bool {
-    if slice.len() < 1 {
-        return true;
-    }
-    let item = &slice[0];
-
-    for v in slice {
-        if v != item {
-            return false;
-        };
-    }
-
-    true
-}
-
 fn parse_invalid_ids(first: usize, second: usize) -> Vec<usize> {
     let mut invalid_ids = Vec::new();
 
@@ -56,14 +41,33 @@ fn parse_invalid_ids(first: usize, second: usize) -> Vec<usize> {
     for i in first..=second {
         let num = i.to_string();
 
-        for j in 1..=(num.len() / 2) {
-            let chunks = num.chars().collect::<Vec<_>>();
-            let chunks = chunks.chunks(j).collect::<Vec<_>>();
+        let mut curr = &num[0..1];
+        let mut index = 1;
+        loop {
+            // lose
+            if curr.len() > num.len() / 2 {
+                break;
+            }
 
-            if chunk_slice_same_elements(&chunks) {
+            // win
+            if index == num.len() {
+                // dbg!(i);
                 invalid_ids.push(i);
                 break;
             }
+
+            // oob index, lose
+            if index + curr.len() > num.len() {
+                break;
+            }
+
+            let next = &num[index..(index + curr.len())];
+            if curr == next {
+                index += curr.len();
+                continue;
+            }
+            index += 1;
+            curr = &num[0..index];
         }
     }
 
