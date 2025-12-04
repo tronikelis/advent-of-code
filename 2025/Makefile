@@ -23,6 +23,13 @@ build/3: 3.rs
 3: build/3
 	build/3 3.txt
 
+build/4: 4.rs
+	rustc 4.rs -o build/4
+
+.PHONY: 4
+4: build/4
+	build/4 4.txt
+
 .PHONY: clean
 clean:
 	rm -r build/*

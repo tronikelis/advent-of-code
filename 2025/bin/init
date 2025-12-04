@@ -18,6 +18,11 @@ cat <<EOF > rust-project.json
             "root_module": "3.rs",
             "edition": "2018",
             "deps": []
+        },
+        {
+            "root_module": "4.rs",
+            "edition": "2018",
+            "deps": []
         }
     ]
 }
