@@ -16,6 +16,13 @@ build/2: 2.rs
 2: build/2
 	build/2 2.txt
 
+build/3: 3.rs
+	rustc 3.rs -o build/3
+
+.PHONY: 3
+3: build/3
+	build/3 3.txt
+
 .PHONY: clean
 clean:
 	rm -r build/*
