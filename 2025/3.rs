@@ -4,26 +4,30 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-fn calculate_joltage(nums: &[usize], batteries: usize) -> usize {}
+fn calculate_joltage(nums: &[usize], batteries: usize) -> usize {
+    let mut highest_left_index = 0;
+    let mut highest_nums = Vec::new();
+    while highest_nums.len() != batteries {
+        for i in highest_left_index..nums.len() {
+            let left = nums.len() - i;
+            if left < batteries - highest_nums.len() {
+                break;
+            }
 
-// part 1
-// fn calculate_num_vec(nums: &[usize]) -> usize {
-//     let mut highest_index = find_highest_index(0, nums.len(), nums);
-//     if highest_index == -1 {
-//         return 0;
-//     }
-//
-//     let mut second_highest_index = find_highest_index(highest_index as usize + 1, nums.len(), nums);
-//     // dbg!(highest_index, second_highest_index);
-//     // the last element is currently the highest
-//     if second_highest_index == -1 {
-//         second_highest_index = find_highest_index(0, highest_index as usize, nums);
-//         assert_ne!(second_highest_index, -1);
-//         nums[highest_index as usize] + nums[second_highest_index as usize] * 10
-//     } else {
-//         nums[highest_index as usize] * 10 + nums[second_highest_index as usize]
-//     }
-// }
+            if nums[highest_left_index] < nums[i] {
+                highest_left_index = i;
+            }
+        }
+
+        dbg!(highest_left_index);
+        highest_nums.push(nums[highest_left_index]);
+        highest_left_index += 1;
+    }
+
+    highest_nums.iter().enumerate().fold(0, |acc, (i, v)| {
+        acc + *v * 10_usize.pow((highest_nums.len() - i - 1) as u32)
+    })
+}
 
 fn main() {
     let filename = args().collect::<Vec<_>>();
