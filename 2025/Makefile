@@ -37,6 +37,13 @@ build/5: 5.rs
 5: build/5
 	build/5 5.txt
 
+build/6: 6.rs
+	rustc 6.rs -o build/6
+
+.PHONY: 6
+6: build/6
+	build/6 6.txt
+
 .PHONY: clean
 clean:
 	rm -r build/*
